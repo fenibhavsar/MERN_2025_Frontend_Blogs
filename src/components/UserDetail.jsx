@@ -15,7 +15,6 @@ const UserDetail = ({ id }) => {
                 },
                 withCredentials: true,
             });
-            console.log(api);
             setUser(api.data.user)
         }
         fetchUser();

@@ -7,31 +7,38 @@ import { useNavigate } from 'react-router-dom'
 
 const AddBlog = () => {
 
-
   const auth = useContext(context);
   const navigate = useNavigate();
-  // console.log(auth)
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [imgUrl, setImgUrl] = useState("")
 
+
   useEffect(() => {
     const fetchBlog = async () => {
-      const api = await axios.get(`https://mern-2025-blogs.onrender.com/api/blogs/blog/${auth.id}`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true,
-      });
-
-      setTitle(api.data.blog.title);
-      setDescription(api.data.blog.description);
-      setImgUrl(api.data.blog.imgUrl);
-
+      try {
+        console.log("Fetching blog for ID:", auth.id);
+        const api = await axios.get(`https://mern-2025-blogs.onrender.com/api/blogs/blog/${auth.id}`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true,
+        });
+  
+        setTitle(api.data.blog.title);
+        setDescription(api.data.blog.description);
+        setImgUrl(api.data.blog.imgUrl);
+      } catch (error) {
+        console.error("Fetch blog failed:", error.response?.data || error.message);
+      }
+    };
+  
+    if (auth.id) {
+      fetchBlog();
     }
-    fetchBlog();
-  }, [auth.id])
+  }, [auth.id]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +57,6 @@ const AddBlog = () => {
             withCredentials: true,
           });
 
-        // console.log(api);
         toast.success(api.data.message, {
           position: "top-center",
           autoClose: 1500,
@@ -69,7 +75,6 @@ const AddBlog = () => {
         }, 1500);
 
       } catch (error) {
-        // console.error(error)
         toast.error(error.response.data.message, {
           position: "top-center",
           autoClose: 1500,
@@ -98,7 +103,6 @@ const AddBlog = () => {
             withCredentials: true,
           });
 
-        // console.log(api);
         toast.success(api.data.message, {
           position: "top-center",
           autoClose: 1500,
@@ -118,7 +122,6 @@ const AddBlog = () => {
 
         auth.setId("");
       } catch (error) {
-        // console.error(error)
         toast.error(error.response.data.message, {
           position: "top-center",
           autoClose: 1500,
@@ -131,10 +134,8 @@ const AddBlog = () => {
           // transition: Bounce,
         });
         auth.setIsAuthenticated(false);
-
       }
     }
-
   }
 
   return (
@@ -157,7 +158,6 @@ const AddBlog = () => {
           <h1 className="text-center my-3">Edit Blog</h1>) : (
           <h1 className="text-center my-3">Add Blog</h1>
         )}
-
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3 my-5">

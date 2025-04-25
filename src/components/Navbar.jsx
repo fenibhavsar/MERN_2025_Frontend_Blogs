@@ -24,7 +24,6 @@ const Navbar = () => {
                 withCredentials: true,
             });
 
-        // console.log(api);
         toast.success(api.data.message, {
             position: "top-center",
             autoClose: 1500,

@@ -7,7 +7,6 @@ const State = (props) => {
     const [user, setUser] = useState("");
     const [id, setId] = useState("");
 
-
     return (
         <Context.Provider value={{
             isAuthenticated, setIsAuthenticated,

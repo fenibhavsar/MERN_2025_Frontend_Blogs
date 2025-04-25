@@ -9,7 +9,6 @@ const Register = () => {
 
   const auth = useContext(context);
   const navigate = useNavigate();
-  // console.log(auth)
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -30,7 +29,6 @@ const Register = () => {
           withCredentials: true,
         });
 
-      // console.log(api);
       toast.success(api.data.message, {
         position: "top-center",
         autoClose: 1500,
@@ -42,12 +40,10 @@ const Register = () => {
         theme: "dark",
         // transition: Bounce,
       });
-
       auth.setIsAuthenticated(true);
       setTimeout(() => {
         navigate('/login')
       }, 1500);
-
     } catch (error) {
       // console.error(error)
       toast.error(error.response.data.message, {

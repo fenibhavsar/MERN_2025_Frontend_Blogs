@@ -5,13 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import context from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom'
 
-
 const Login = () => {
 
   const auth = useContext(context)
   const navigate = useNavigate();
-  // console.log(auth)
-
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -30,7 +27,6 @@ const Login = () => {
           withCredentials: true,
         });
 
-      // console.log(api);
       toast.success(api.data.message, {
         position: "top-center",
         autoClose: 1500,
@@ -64,8 +60,6 @@ const Login = () => {
       });
       auth.setIsAuthenticated(false);
     }
-
-    // console.log(name,email,password)
   }
 
   return (

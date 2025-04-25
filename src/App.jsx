@@ -19,8 +19,6 @@ const App = () => {
     }
   }, [auth.isAuthenticated])
 
-
-
   return (
     <>
       <Navbar />
