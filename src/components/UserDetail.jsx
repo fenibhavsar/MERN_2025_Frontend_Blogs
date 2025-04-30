@@ -22,8 +22,8 @@ const UserDetail = ({ id }) => {
 
     return (
         <>
-            <h3><BiSolidUserCircle /> {" "} {user.name}</h3>
-            <h3><MdEmail /> {" "} {user.email}</h3>
+            <h6><BiSolidUserCircle /> {" "} {user.name}</h6>
+            {/* <h6><MdEmail /> {" "} {user.email}</h6> */}
         </>
     )
 }

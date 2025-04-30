@@ -25,7 +25,7 @@ const AddBlog = () => {
           },
           withCredentials: true,
         });
-  
+
         setTitle(api.data.blog.title);
         setDescription(api.data.blog.description);
         setImgUrl(api.data.blog.imgUrl);
@@ -33,7 +33,7 @@ const AddBlog = () => {
         console.error("Fetch blog failed:", error.response?.data || error.message);
       }
     };
-  
+
     if (auth.id) {
       fetchBlog();
     }
@@ -153,45 +153,95 @@ const AddBlog = () => {
         theme="dark"
       // transition={Bounce}
       />
-      <div className="container" style={{ width: '45%' }}>
-        {(auth.id) ? (
-          <h1 className="text-center my-3">Edit Blog</h1>) : (
-          <h1 className="text-center my-3">Add Blog</h1>
-        )}
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3 my-5">
-            <label htmlFor="exampleInputEmail1" className="form-label">Title</label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              type="text" className="form-control" id="exampletext" aria-describedby="emailHelp" />
+      <div className="container d-flex justify-content-center my-5">
+        <div className="card bg-secondary text-light p-4" style={{ maxWidth: '760px', width: '100%' }}>
+
+          {/* Row 1: Title */}
+          <div className="row mb-4">
+            <div className="col-12 text-center">
+              <h3 className="card-title">{auth.id ? "Edit Blog" : "Add Blog"}</h3>
+            </div>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">Description</label>
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+          {/* Row 2: ImgUrl (Preview) + Description */}
+          <div className="row mb-4">
+            <div className="col-md-6 d-flex align-items-center justify-content-center">
+              {imgUrl ? (
+                <img src={imgUrl} className="img-fluid rounded" alt="Preview" style={{ maxHeight: '200px' }} />
+              ) : (
+                <div className="text-muted">Image preview</div>
+              )}
+            </div>
+            <div className="col-md-6">
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label">Title</label>
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    type="text"
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Description</label>
+                  <input
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    type="text"
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Image URL</label>
+                  <input
+                    value={imgUrl}
+                    onChange={(e) => setImgUrl(e.target.value)}
+                    type="text"
+                    className="form-control"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">ImgUrl</label>
-            <input
-              value={imgUrl}
-              onChange={(e) => setImgUrl(e.target.value)}
-              type="text" className="form-control" id="exampleInputPassword1" />
-          </div>
-          <div className="d-grid gap-2 my-5">
-            {(auth.id) ? (
-              <button type="submit" className="btn btn-primary">Edit Blog</button>) : (
-              <button type="submit" className="btn btn-primary">Add Blog</button>
-            )}
+          {/* Row 3: Submit Button */}
+          <div className="row">
+            <div className="col-12 d-flex justify-content-center gap-3">
+              <button onClick={handleSubmit} className="btn btn-primary">
+                {auth.id ? "Update Blog" : "Add Blog"}
+              </button>
+              <button
+                className="btn btn-outline-light"
+                onClick={() => {
+                  auth.setId("");
+                  navigate('/profile');
+                }}
+              >
+                Close
+              </button>
+            </div>
           </div>
 
-        </form>
+
+        </div>
       </div>
+
     </>
   )
 }

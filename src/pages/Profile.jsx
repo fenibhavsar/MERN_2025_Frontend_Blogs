@@ -22,10 +22,23 @@ const Profile = () => {
     fetchUser();
   }, [])
 
+  if (!auth.user) {
+    return <div className="text-center my-5 text-muted">Loading profile...</div>;
+  }
+  
   return (
     <div className='text-center my-3'>
-      <h1><BiSolidUserCircle /> {" "}{auth.user.name}</h1>
-      <h1><MdEmail />{" "}{auth.user.email}</h1>
+      <h4><BiSolidUserCircle /> {" "}{auth.user.name}</h4>
+      <h4><MdEmail />{" "}{auth.user.email}</h4>
+      <MyBlogs />
+    </div>
+  );
+  
+
+  return (
+    <div className='text-center my-3'>
+      <h4><BiSolidUserCircle /> {" "}{auth.user.name}</h4>
+      <h4><MdEmail />{" "}{auth.user.email}</h4>
       <MyBlogs />
     </div>
   )

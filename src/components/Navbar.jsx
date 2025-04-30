@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import context from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,19 +10,16 @@ import { BiSolidUserCircle } from "react-icons/bi";
 import { BiLogOut } from "react-icons/bi";
 
 const Navbar = () => {
-
     const auth = useContext(context);
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const logOut = async () => {
-        const api = await axios.get(`https://mern-2025-blogs.onrender.com/api/users/logout`,
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                withCredentials: true,
-            });
+        const api = await axios.get(`https://mern-2025-blogs.onrender.com/api/users/logout`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        });
 
         toast.success(api.data.message, {
             position: "top-center",
@@ -33,54 +30,61 @@ const Navbar = () => {
             draggable: true,
             progress: undefined,
             theme: "dark",
-            // transition: Bounce,
         });
 
         auth.setIsAuthenticated(false);
-        setTimeout(() => {
-            navigate('/')
-        }, 1500);
-    }
+        auth.setUser(null);
+
+        setTimeout(() => navigate('/'), 1500);
+    };
+
+    if (auth.isAuthenticated === null) return null; // Wait for auth to load
+
+
 
     return (
         <>
-            <ToastContainer
-                position="top-right"
-                autoClose={1500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            // transition={Bounce}
-            />
+            <ToastContainer /* ... */ />
             <div className='navbar'>
                 <Link to={'/'} className='left'>
-                    <h2>MERN - Blog Application</h2>
+                    <h2>Blogs</h2>
                 </Link>
                 <div className='right'>
-                    {(!auth.isAuthenticated) &&
-                        <Link to={"/login"} className='items'><h3><BiLogIn /></h3></Link>
-                    }
-                    {(!auth.isAuthenticated) &&
-                        <Link to={"/register"} className='items'><h3>Register</h3></Link>
-                    }
-                    {(auth.isAuthenticated) &&
-                        <Link to={"/addblog"} className='items'><h3>AddBlog</h3></Link>
-                    }
-                    {(auth.isAuthenticated) &&
-                        <Link to={"/profile"} className='items'><h3><BiSolidUserCircle /></h3></Link>
-                    }
-                    {(auth.isAuthenticated) &&
-                        <div onClick={logOut} className='items'><h3><BiLogOut /></h3></div>
+                    {!auth.isAuthenticated && (
+                        <>
+                            <Link to="/login" className="items"><h3><BiLogIn /></h3></Link>
+                            <Link to="/register" className="items"><h3>Register</h3></Link>
+                        </>
+                    )}
+
+                    {
+                        auth.isAuthenticated && (
+                            <>
+                                {/* <Link to="/addblog" className="items"><h3>AddBlog</h3></Link> */}
+                                <NavLink
+                                    to="/addblog"
+                                    className={`nav-link ${auth.id ? 'disabled text-muted me-2' : 'me-2'}`}
+                                    onClick={(e) => auth.id && e.preventDefault()} // prevent navigation
+                                >
+                                 <h3>AddBlog</h3>
+                                </NavLink>
+                                {/* <Link to="/profile" className="items"><h3><BiSolidUserCircle /></h3></Link> */}
+                                <NavLink
+                                    to="/profile"
+                                    className={`nav-link ${auth.id ? 'disabled text-muted me-2' : 'me-2'}`}
+                                    onClick={(e) => auth.id && e.preventDefault()} // prevent navigation
+                                >
+                                 <h3><BiSolidUserCircle /></h3> 
+                                </NavLink>
+
+                                <div onClick={logOut} className="items"><h3><BiLogOut /></h3></div>
+                            </>
+                        )
                     }
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Navbar 
